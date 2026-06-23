@@ -1,0 +1,17 @@
+{
+  "name": "ChickenCalc",
+  "short_name": "ChickenCalc",
+  "start_url": "/ChickenCalc/",
+  "display": "standalone",
+  "background_color": "#f4f6f9",
+  "theme_color": "#ff6b6b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

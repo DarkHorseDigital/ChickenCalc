@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ChickenCalc</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon.png">
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+            --primary-color: #ff6b6b;
+            --border-color: #e2e8f0;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #1a202c;
+                --card-bg: #2d3748;
+                --text-color: #f7fafc;
+                --border-color: #4a5568;
+            }
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 16px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 480px; background: var(--card-bg); padding: 24px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        h1 { font-size: 24px; margin-bottom: 20px; text-align: center; color: var(--primary-color); }
+        .input-group { margin-bottom: 24px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        input { width: 100%; padding: 12px; font-size: 18px; border: 2px solid var(--border-color); border-radius: 8px; background: transparent; color: inherit; outline: none; transition: border-color 0.2s; }
+        input:focus { border-color: var(--primary-color); }
+        .results { display: none; border-top: 2px dashed var(--border-color); padding-top: 16px; }
+        .results.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        .ingredient-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 16px; }
+        .ingredient-row:last-child { border-bottom: none; }
+        .weight { font-weight: bold; color: var(--primary-color); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🍗 Калькулятор маринада</h1>
+    
+    <div class="input-group">
+        <label for="chicken-weight">Вес курицы (в граммах):</label>
+        <input type="number" id="chicken-weight" inputmode="numeric" placeholder="Например: 1250" min="0">
+    </div>
+
+    <div class="results" id="results-box">
+        <div class="ingredient-row"><span>Масло растительное</span><span class="weight" id="oil">0 г</span></div>
+        <div class="ingredient-row"><span>Соус кимчи</span><span class="weight" id="kimchi">0 г</span></div>
+        <div class="ingredient-row"><span>Соль</span><span class="weight" id="salt">0 г</span></div>
+        <div class="ingredient-row"><span>Перец черный молотый</span><span class="weight" id="pepper">0 г</span></div>
+        <div class="ingredient-row"><span>Кориандр молотый</span><span class="weight" id="coriander">0 г</span></div>
+        <div class="ingredient-row"><span>Паприка копченая</span><span class="weight" id="paprika">0 г</span></div>
+        <div class="ingredient-row"><span>Чеснок сушеный</span><span class="weight" id="garlic">0 г</span></div>
+    </div>
+</div>
+
+<script>
+    // Рецептурные коэффициенты на 1 грамм курицы
+    const base = 1000;
+    const recipe = {
+        oil: 50 / base,
+        kimchi: 10 / base,
+        salt: 10 / base,
+        pepper: 1 / base,
+        coriander: 3 / base,
+        paprika: 10 / base,
+        garlic: 4 / base
+    };
+
+    const input = document.getElementById('chicken-weight');
+    const resultsBox = document.getElementById('results-box');
+
+    input.addEventListener('input', () => {
+        const weight = parseFloat(input.value);
+
+        if (!weight || weight <= 0) {
+            resultsBox.classList.remove('active');
+            return;
+        }
+
+        // Расчет и округление до 1 или 2 знаков после запятой (для мелких специй вроде перца)
+        for (const [ing, coef] of Object.entries(recipe)) {
+            const calcValue = weight * coef;
+            const formattedValue = calcValue % 1 === 0 ? calcValue : calcValue.toFixed(1);
+            document.getElementById(ing).innerText = `${formattedValue} г`;
+        }
+
+        resultsBox.classList.add('active');
+    });
+
+    // Регистрация Service Worker для работы PWA офлайн
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/ChickenCalc/sw.js')
+                .then(reg => console.log('SW registered'))
+                .catch(err => console.log('SW registration failed', err));
+        });
+    }
+</script>
+</body>
+</html>

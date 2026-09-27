@@ -43,7 +43,7 @@
 <body>
 
 <div class="container">
-    <h1>🍗 Калькулятор маринада</h1>
+    <h1>🍗 Калькулятор маринада для ФИЛЕ ГРУДКИ</h1>
     
     <div class="input-group">
         <label for="chicken-weight">Вес курицы (в граммах):</label>
@@ -54,7 +54,6 @@
         <div class="ingredient-row"><span>Масло растительное</span><span class="weight" id="oil">0 г</span></div>
         <div class="ingredient-row"><span>Соус кимчи</span><span class="weight" id="kimchi">0 г</span></div>
         <div class="ingredient-row"><span>Соль</span><span class="weight" id="salt">0 г</span></div>
-        <div class="ingredient-row"><span>Перец черный молотый</span><span class="weight" id="pepper">0 г</span></div>
         <div class="ingredient-row"><span>Кориандр молотый</span><span class="weight" id="coriander">0 г</span></div>
         <div class="ingredient-row"><span>Паприка копченая</span><span class="weight" id="paprika">0 г</span></div>
         <div class="ingredient-row"><span>Чеснок сушеный</span><span class="weight" id="garlic">0 г</span></div>
@@ -62,16 +61,15 @@
 </div>
 
 <script>
-    // Рецептурные коэффициенты на 1 грамм курицы
+    // Рецептурные коэффициенты на 1 килограмм курицы
     const base = 1000;
     const recipe = {
-        oil: 50 / base,
-        kimchi: 10 / base,
-        salt: 10 / base,
-        pepper: 1 / base,
-        coriander: 3 / base,
-        paprika: 10 / base,
-        garlic: 4 / base
+        oil: 25 / base,
+        kimchi: 5 / base,
+        salt: 8 / base,
+        coriander: 1 / base,
+        paprika: 5 / base,
+        garlic: 2 / base
     };
 
     const input = document.getElementById('chicken-weight');

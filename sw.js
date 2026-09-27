@@ -1,4 +1,4 @@
-const CACHE_NAME = 'chicken-calc-v1';
+const CACHE_NAME = 'chicken-calc-v2';
 const ASSETS = [
   '/ChickenCalc/',
   '/ChickenCalc/index.html',
